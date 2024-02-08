@@ -10,6 +10,7 @@ import glob
 import datetime
 import argparse
 import logging
+from datetime import datetime
 from dask.distributed import Client
 
 #setup the argument parser
@@ -37,10 +38,11 @@ dask_scheduler = args.dask_scheduler
 chunk_size = args.chunk_size
 verbose = args.verbose
 if verbose:
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-    logging.info('Verbose output enabled')
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s %(levelname)s: %(message)s',
+                        datefmt='%H:%M:%S')
 
-logging.info('start of script')
+logging.info('Start of script')
 
 # setup dask client
 if usedask:
@@ -49,7 +51,7 @@ if usedask:
     except Exception as e:
         logging.error('Error creating dask client: %s', e)
     else:
-        logging.info('dask client is connected successfully')
+        logging.info('Dask client is connected successfully')
 
 # open the netCDF files
 filelist = glob.glob(os.path.join(netcdf_dir,"*.nc"))
@@ -65,14 +67,14 @@ encoding = {vname: {
 ds.attrs['reprocessing'] = "rechunked and compressed with zarr using zarrconverter.py script."
 logging.info('Encoding is set to Blosc compressor with zstd level 5 and reprocessing attribute is added to the dataset.')
 
-logging.info('start of chunking and compression to zarr: ', datetime.datetime.now())
-print('start of processing')
+logging.info('Start of chunking and compression to zarr')
+print('Start of processing: ', datetime.now().strftime("%H:%M:%S"))
 # save the dataset to zarr
 ds.to_zarr(zarr_dir, encoding=encoding, consolidated=True, mode='w', compute=True)
-logging.info('Dataset is saved to zarr group: ', datetime.datetime.now())
+logging.info('Dataset is saved to zarr group: ' + zarr_dir)
 
 if usedask:
     client.close()
-logging.info('dask client is closed')
+logging.info('Dask client is closed')
 
-logging.info('end of script')
+logging.info('End of script')
