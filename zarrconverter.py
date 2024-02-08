@@ -53,7 +53,7 @@ if usedask:
 
 # open the netCDF files
 filelist = glob.glob(os.path.join(netcdf_dir,"*.nc"))
-ds = xr.open_mfdataset(filelist[1:2], combine='by_coords',
+ds = xr.open_mfdataset(filelist, combine='by_coords',
                        chunks={'time': chunk_size[0], 'longitude' : chunk_size[1], 'latitude': chunk_size[2]},
                        parallel=usedask)
 logging.info('Files are opened and combined to xarray dataset')
