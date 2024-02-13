@@ -12,25 +12,27 @@ python -Xfrozen_modules=off -m ipykernel install --user --name "ZarrConverter" -
 
 ## Usage
 
-Check the notebook `ZarrConverter.ipynb` how it works. A small cli script is also available:
+### NetCDF to Zarr
+
+Check the notebook `netcdf2zarr.ipynb` how it works. A small cli script is also available:
 
 ```bash
-python ZarrConverter.py /path/to/netcdf/folder /somedir/outputpath.zarr
+python netcdf2zarr.py /path/to/netcdf/folder /somedir/outputpath.zarr
 ```
 
-### using dask
+#### using dask
 
 You can specify the scheduler with the `-ds` option. By default no dask is used. If you want to use dask, you have to specify the scheduler with the `-ds`. The default scheduler is `tcp://localhost:8786`. 
 
 ```bash
-python ZarrConverter.py /path/to/netcdf/folder /somedir/outputpath.zarr -d
-python ZarrConverter.py /path/to/netcdf/folder /somedir/outputpath.zarr -d -ds tcp://123.123.123.123:4444
+python netcdf2zarr.py /path/to/netcdf/folder /somedir/outputpath.zarr -d
+python netcdf2zarr.py /path/to/netcdf/folder /somedir/outputpath.zarr -d -ds tcp://123.123.123.123:4444
 ```
 
-### chunking
+#### chunking
 
 You can specify the chunking with the `-c` option. By default the chunking is set to `1 1080 1080`.  The chunking is specified as `time,lat,lon`. An example for a chunking of `256 30 30`, which might be better for time series analysis would be:
 
 ```bash
-python ZarrConverter.py /path/to/netcdf/folder /somedir/outputpath.zarr -c 256 30 30
+python netcdf2zarr.py /path/to/netcdf/folder /somedir/outputpath.zarr -c 256 30 30
 ```
