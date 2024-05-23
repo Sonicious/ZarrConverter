@@ -5,7 +5,7 @@
 ```bash
 conda create -n ZarrConverter python pip
 conda activate ZarrConverter
-conda install -n ZarrConverter -c conda-forge xarray importlib_metadata ipykernel dask gdal zarr h5netcdf netcdf4 fsspec requests aiohttp
+conda install -n ZarrConverter -c conda-forge xarray importlib_metadata ipykernel dask gdal zarr h5netcdf netcdf4 fsspec requests aiohttp rioxarray
 
 python -Xfrozen_modules=off -m ipykernel install --user --name "ZarrConverter" --display-name "ZarrConverter Kernel"
 ```
