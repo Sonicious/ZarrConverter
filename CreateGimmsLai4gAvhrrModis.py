@@ -44,12 +44,13 @@ def main():
     # Create the new dataset
     files = glob.glob(tiff_dir + "/*.tif")
     cube = xr.concat([CubeFile(file) for file in files], dim="time")
+    ds = ds.rename({"x":"lon", "y":"lat"})
     ds = cube.to_dataset(dim="band")
     ds = ds.rename_vars({1:"LAI", 2:"QC"})
 
     # set chunking
-    ds["LAI"] = ds["LAI"].chunk({"time":1, "y":4320, "x":2160})
-    ds["QC"] = ds["QC"].chunk({"time":1, "y":4320, "x":2160})
+    ds["LAI"] = ds["LAI"].chunk({"time":1, "lat":4320, "lon":2160})
+    ds["QC"] = ds["QC"].chunk({"time":1, "lat":4320, "lon":2160})
 
     lai_attrs = {
         "long_name":"Leaf Area Index",
