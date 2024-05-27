@@ -33,7 +33,7 @@ def main():
         halfmonth = date[6:8]
         day = 1 if halfmonth == "01" else 16
         cube = xr.open_dataarray(file, engine="rasterio", chunks={"y":512, "x":512})
-        cube.where(cube != fill_value_old, fill_value_new)
+        cube = cube.where(cube != fill_value_old, fill_value_new)
         dt = np.datetime64(datetime.datetime(int(year), int(month), int(day)))
         cube = cube.assign_coords({"time":dt})
         cube = cube.expand_dims("time")
