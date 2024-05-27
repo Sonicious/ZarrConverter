@@ -44,7 +44,7 @@ def main():
     # Create the new dataset
     files = glob.glob(tiff_dir + "/*.tif")
     cube = xr.concat([CubeFile(file) for file in files], dim="time")
-    ds = ds.rename({"x":"lon", "y":"lat"})
+    cube = cube.rename({"x":"lon", "y":"lat"})
     ds = cube.to_dataset(dim="band")
     ds = ds.rename_vars({1:"LAI", 2:"QC"})
 
