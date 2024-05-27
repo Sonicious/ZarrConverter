@@ -7,7 +7,7 @@ import glob
 def main():
 
     from dask.distributed import Client
-    client = Client(n_workers=4, threads_per_worker=4, memory_limit='4GB')
+    client = Client(n_workers=3, threads_per_worker=3, memory_limit='8GB')
     # link to dashboard
     print(client.dashboard_link)
 
@@ -16,7 +16,7 @@ def main():
 
     filelist = glob.glob(os.path.join(netcdf_dir,"*.nc"))
     ds = xr.open_mfdataset(filelist, combine='by_coords',
-                        chunks={'time': 1, 'latitude' : 720, 'longitude': 1440})
+                        chunks={'latitude' : 720, 'longitude': 1440})
 
     encoding = {vname: {
         'compressor': zarr.Blosc(cname='zstd', clevel=5),

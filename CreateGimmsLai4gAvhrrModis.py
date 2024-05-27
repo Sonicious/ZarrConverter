@@ -14,13 +14,13 @@ def main():
     warnings.filterwarnings("ignore", category=UserWarning)
     
     from dask.distributed import Client
-    client = Client(memory_limit='4GB')
+    client = Client(n_workers=8, threads_per_worker=2, memory_limit='4GB')
     # link to dashboard
     print("Dashboard available under: " + str(client.dashboard_link))
 
     # Set the directory where the data is stored
     tiff_dir = "GIMMS_LAI4g_AVHRR_MODIS_consolidated_1982_2020"
-    zarr_dir = "GIMMS_LAI4g_AVHRR_MODIS_consolidated_1982_2020_1x512x512.zarr"
+    zarr_dir = "GIMMS_LAI4g_AVHRR_MODIS_consolidated_1982_2020_1x4320x2160.zarr"
     fill_value_old = 65535 # fill value in the original data from README
     fill_value_new = np.nan
 
@@ -32,7 +32,7 @@ def main():
         month = date[4:6]
         halfmonth = date[6:8]
         day = 1 if halfmonth == "01" else 16
-        cube = xr.open_dataarray(file, engine="rasterio", chunks={"y":512, "x":512})
+        cube = xr.open_dataarray(file, engine="rasterio", chunks={"y":4320, "x":2160})
         cube = cube.where(cube != fill_value_old, fill_value_new)
         dt = np.datetime64(datetime.datetime(int(year), int(month), int(day)))
         cube = cube.assign_coords({"time":dt})
@@ -48,8 +48,8 @@ def main():
     ds = ds.rename_vars({1:"LAI", 2:"QC"})
 
     # set chunking
-    ds["LAI"] = ds["LAI"].chunk({"time":1, "y":512, "x":512})
-    ds["QC"] = ds["QC"].chunk({"time":1, "y":512, "x":512})
+    ds["LAI"] = ds["LAI"].chunk({"time":1, "y":4320, "x":2160})
+    ds["QC"] = ds["QC"].chunk({"time":1, "y":4320, "x":2160})
 
     lai_attrs = {
         "long_name":"Leaf Area Index",
