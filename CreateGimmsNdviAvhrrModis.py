@@ -9,7 +9,7 @@ import warnings
 
 def main():
     
-    print("Converting GIMMS LAI4g AVHRR MODIS consolidated data to Zarr format...")
+    print("Converting GIMMS NDVI AVHRR MODIS consolidated data to Zarr format...")
     
     warnings.filterwarnings("ignore", category=UserWarning)
     
