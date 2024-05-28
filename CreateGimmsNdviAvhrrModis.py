@@ -19,8 +19,8 @@ def main():
     print("Dashboard available under: " + str(client.dashboard_link))
 
     # Set the directory where the data is stored
-    tiff_dir = "D:\\GW_Data\\PKU_GIMMS_NDVI_AVHRR_MODIS_consolidated_1982_2022"
-    zarr_dir = "D:\\GW_Data\\PKU_GIMMS_NDVI_AVHRR_MODIS_consolidated_1982_2022_1x4320x2160.zarr"
+    tiff_dir = "PKU_GIMMS_NDVI_AVHRR_MODIS_consolidated_1982_2022"
+    zarr_dir = "PKU_GIMMS_NDVI_AVHRR_MODIS_consolidated_1982_2022_1x4320x2160.zarr"
     fill_value_old = 65535 # fill value in the original data from README
     fill_value_new = np.nan
 
