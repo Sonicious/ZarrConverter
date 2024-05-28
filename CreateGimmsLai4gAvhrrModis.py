@@ -32,7 +32,7 @@ def main():
         month = date[4:6]
         halfmonth = date[6:8]
         day = 1 if halfmonth == "01" else 16
-        cube = xr.open_dataarray(file, engine="rasterio", chunks={"y":4320, "x":2160})
+        cube = xr.open_dataarray(file, engine="rasterio", chunks={"y":2160, "x":4320})
         cube = cube.where(cube != fill_value_old, fill_value_new)
         dt = np.datetime64(datetime.datetime(int(year), int(month), int(day)))
         cube = cube.assign_coords({"time":dt})
@@ -49,8 +49,8 @@ def main():
     ds = ds.rename_vars({1:"LAI", 2:"QC"})
 
     # set chunking
-    ds["LAI"] = ds["LAI"].chunk({"time":1, "lat":4320, "lon":2160})
-    ds["QC"] = ds["QC"].chunk({"time":1, "lat":4320, "lon":2160})
+    ds["LAI"] = ds["LAI"].chunk({"time":1, "lat":2160, "lon":4320})
+    ds["QC"] = ds["QC"].chunk({"time":1, "lat":2160, "lon":4320})
 
     lai_attrs = {
         "long_name":"Leaf Area Index",
