@@ -43,7 +43,6 @@ def main():
 
     # Create the new dataset
     files = glob.glob(tiff_dir + "/*.tif")
-    files = files[1:10]
     cube = xr.concat([CubeFile(file) for file in files], dim="time")
     cube = cube.rename({"x":"lon", "y":"lat"})
     ds = cube.to_dataset(name="GPP")
