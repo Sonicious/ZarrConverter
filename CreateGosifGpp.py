@@ -14,7 +14,7 @@ def main():
     warnings.filterwarnings("ignore", category=UserWarning)
     
     from dask.distributed import Client
-    client = Client(n_workers=8, threads_per_worker=2, memory_limit='4GB')
+    client = Client(n_workers=2, threads_per_worker=2, memory_limit='6GB')
     # link to dashboard
     print("Dashboard available under: " + str(client.dashboard_link))
 

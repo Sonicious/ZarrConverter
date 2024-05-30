@@ -14,7 +14,7 @@ def main():
     warnings.filterwarnings("ignore", category=UserWarning)
     
     from dask.distributed import Client
-    client = Client(n_workers=8, threads_per_worker=2, memory_limit='4GB')
+    client = Client(n_workers=2, threads_per_worker=2, memory_limit='6GB')
     # link to dashboard
     print("Dashboard available under: " + str(client.dashboard_link))
 
@@ -27,8 +27,8 @@ def main():
 
     def CubeFile(file):
         # extract date from filename
-        date = os.path.basename(file).split("_")[-2]
-        # date = date.split(".")[0]
+        date = os.path.basename(file).split("_")[-1]
+        date = date.split(".")[0]
         year = date[0:4]
         dayofyear = date[5:7]
         dt = datetime.datetime(int(year), 1, 1) + datetime.timedelta(int(dayofyear) - 1)
