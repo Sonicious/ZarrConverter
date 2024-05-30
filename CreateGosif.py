@@ -32,7 +32,7 @@ def main():
         year = date[0:4]
         dayofyear = date[5:7]
         dt = datetime.datetime(int(year), 1, 1) + datetime.timedelta(int(dayofyear) - 1)
-        cube = xr.open_dataarray(file, engine="rasterio")
+        cube = xr.open_dataarray(file, engine="rasterio", chunks={"y":3600, "x":7200})
         cube = cube.where(cube != fill_value_old_1, fill_value_new)
         cube = cube.where(cube != fill_value_old_2, fill_value_new)
         cube = cube.assign_coords({"time":dt})
