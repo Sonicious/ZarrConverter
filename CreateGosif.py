@@ -20,7 +20,7 @@ def main():
 
     # Set the directory where the data is stored
     tiff_dir = "GOSIF_v2"
-    zarr_dir = "GOSIF_v2_2000_2023_1x3600x7200.zarr.zarr"
+    zarr_dir = "GOSIF_v2_2000_2023_1x3600x7200.zarr"
     fill_value_old_1 = 65535 # fill value in the original data from README
     fill_value_old_2 = 65534 # fill value in the original data from README
     fill_value_new = np.nan
