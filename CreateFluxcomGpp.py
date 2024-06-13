@@ -12,11 +12,13 @@ def main():
     print(client.dashboard_link)
 
     netcdf_dir = "Fluxcom-X-GPP-daily-0.25deg"
-    zarr_dir = "Fluxcom-X-GPP-daily-0.25deg-1x720x1440.zarr"
+    zarr_dir = "Fluxcom-X-GPP-daily-0.25deg-100x720x1440.zarr"
 
     filelist = glob.glob(os.path.join(netcdf_dir,"*.nc"))
-    ds = xr.open_mfdataset(filelist, combine='by_coords',
-                        chunks={'latitude' : 720, 'longitude': 1440})
+    ds = xr.open_mfdataset(filelist,
+                           combine='by_coords',
+                           chunks={-1}
+    )
 
     encoding = {vname: {
         'compressor': zarr.Blosc(cname='zstd', clevel=5),
