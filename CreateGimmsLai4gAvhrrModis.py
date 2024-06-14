@@ -34,7 +34,7 @@ def main():
         day = 8 if halfmonth == "01" else 23
         cube = xr.open_dataarray(file,
                                  engine="rasterio",
-                                 chunks={-1}
+                                 chunks={}
         )
         cube = cube.where(cube != fill_value_old, fill_value_new)
         dt = np.datetime64(datetime.datetime(int(year), int(month), int(day)))
