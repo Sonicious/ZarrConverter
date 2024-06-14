@@ -17,7 +17,7 @@ def main():
     filelist = glob.glob(os.path.join(netcdf_dir,"*.nc"))
     ds = xr.open_mfdataset(filelist,
                            combine='by_coords',
-                           chunks={-1}
+                           chunks={}
     )
 
     encoding = {vname: {
