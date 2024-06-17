@@ -6,6 +6,8 @@ import os
 import glob
 import datetime
 import warnings
+from dask.distributed import Client
+from dask.diagnostics import ProgressBar
 
 def main():
     
@@ -13,8 +15,8 @@ def main():
     
     warnings.filterwarnings("ignore", category=UserWarning)
     
-    from dask.distributed import Client
-    client = Client(n_workers=8, threads_per_worker=2, memory_limit='4GB')
+    client = Client(n_workers=8, threads_per_worker=4, memory_limit='10GB')
+    # client = Client(n_workers=2, threads_per_worker=2, memory_limit='8GB')
     # link to dashboard
     print("Dashboard available under: " + str(client.dashboard_link))
 
@@ -46,17 +48,19 @@ def main():
     cube = xr.concat([CubeFile(file) for file in files], dim="time")
     cube = cube.rename({"x":"lon", "y":"lat"})
     ds = cube.to_dataset(dim="band")
-    ds = ds.rename_vars({1:"SIF"})
+    ds = ds.rename_vars({1:"sif"})
+    # cube = cube.sel(band=1).drop_vars("band")
+    # ds = cube.to_dataset(name="sif")
 
     # set chunking
-    ds["SIF"] = ds["SIF"].chunk({"time":1, "lat":360, "lon":720})
+    ds["sif"] = ds["sif"].chunk({"time":1, "lat":360, "lon":720})
 
     sif_attrs = {
         "long_name":"solar-induced chlorophyll fluorescence (SIF)",
         "Unit":"W m-1 um-1 sr-1",
         "_FillValue":fill_value_new,
     }
-    ds["SIF"].attrs = sif_attrs
+    ds["sif"].attrs = sif_attrs
     ds.attrs = {
         "title":"TCSIF Level 3 SIF data (2007-2021)",
         "history":"converted to zarr by Martin Reinhardt, RSC4Earth, University of Leipzig",
@@ -70,8 +74,8 @@ def main():
     
     print("Writing Zarr files...")
 
-    # ds.to_dataarray().to_zarr(zarr_dir, mode="w", consolidated=True, compute=True)
-    ds.to_zarr(zarr_dir, mode="w", consolidated=True, compute=True, encoding=encoding)
+    with ProgressBar():
+        ds.to_zarr(zarr_dir, mode="w", consolidated=True, compute=True, encoding=encoding)
 
     Client.close(client)
 

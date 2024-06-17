@@ -50,8 +50,10 @@ def main():
     files = glob.glob(tiff_dir + "/*.tif")
     cube = xr.concat([CubeFile(file) for file in files], dim="time")
     cube = cube.rename({"x":"lon", "y":"lat"})
-    cube = cube.sel(band=1).drop_vars("band")
-    ds = cube.to_dataset(name="gpp")
+    ds = cube.to_dataset(dim="band")
+    ds = ds.rename_vars({1:"gpp"})
+    # cube = cube.sel(band=1).drop_vars("band")
+    # ds = cube.to_dataset(name="gpp")
 
     # set chunking
     ds["gpp"] = ds["gpp"].chunk({"time":1, "lat":3600, "lon":7200})
