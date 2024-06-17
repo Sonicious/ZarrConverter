@@ -48,8 +48,8 @@ def main():
     files = glob.glob(tiff_dir + "/*.tif")
     cube = xr.concat([CubeFile(file) for file in files], dim="time")
     cube = cube.rename({"x":"lon", "y":"lat"})
+    cube = cube.drop_vars("band")
     ds = cube.to_dataset(name="SIF")
-    ds = ds.drop_vars("band")
 
     # set chunking
     ds["SIF"] = ds["SIF"].chunk({"time":1, "lat":3600, "lon":7200})
