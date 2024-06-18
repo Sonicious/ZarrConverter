@@ -32,7 +32,7 @@ def main():
         date = os.path.basename(file).split("_")[-1]
         date = date.split(".")[0]
         year = date[0:4]
-        dayofyear = date[5:7]
+        dayofyear = date[4:7]
         dt = datetime.datetime(int(year), 1, 1) + datetime.timedelta(int(dayofyear) - 1)
         cube = xr.open_dataarray(file,
                                  engine="rasterio",
