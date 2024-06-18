@@ -86,7 +86,8 @@ def main():
     
     print("Writing Zarr files...")
 
-    ds.to_zarr(zarr_dir, mode="w", consolidated=True, compute=True, encoding=encoding)
+    with ProgressBar():
+        ds.to_zarr(zarr_dir, mode="w", consolidated=True, compute=True, encoding=encoding)
 
     Client.close(client)
 

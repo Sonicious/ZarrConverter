@@ -32,7 +32,8 @@ def main():
     ds["GPP"] = ds["GPP"].chunk({'time': 100, 'lat': 720, 'lon': 1440})
     ds["land_fraction"] = ds["land_fraction"].chunk({'time': 100, 'lat': 720, 'lon': 1440})
 
-    ds.to_zarr(zarr_dir, encoding=encoding, consolidated=True, mode='w', compute=True)
+    with ProgressBar():
+        ds.to_zarr(zarr_dir, mode="w", consolidated=True, compute=True, encoding=encoding)
 
     client.close()
 
