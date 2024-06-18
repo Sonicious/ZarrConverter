@@ -3,11 +3,13 @@ import zarr
 import numpy as np
 import os
 import glob
+from dask.distributed import Client
+from dask.diagnostics import ProgressBar
 
 def main():
 
-    from dask.distributed import Client
-    client = Client(n_workers=3, threads_per_worker=3, memory_limit='8GB')
+    client = Client(n_workers=8, threads_per_worker=4, memory_limit='10GB')
+    # client = Client(n_workers=2, threads_per_worker=2, memory_limit='8GB')
     # link to dashboard
     print(client.dashboard_link)
 
