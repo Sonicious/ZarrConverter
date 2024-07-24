@@ -27,7 +27,7 @@ def main():
 
     def CubeFile(file, ref_coords=None):
         # extract date from filename
-        date = os.path.basename(file).split("_")[-2]
+        date = os.path.basename(file).split("_")[-1]
         # date = date.split(".")[0]
         year = date[0:4]
         dayofyear = date[4:7]
