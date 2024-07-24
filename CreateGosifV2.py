@@ -12,9 +12,7 @@ from dask.diagnostics import ProgressBar
 def main():
     
     print("Converting GOSIF GPP v2 consolidated data to Zarr format...")
-    
-    warnings.filterwarnings("ignore", category=UserWarning)
-    
+        
     client = Client(n_workers=8, threads_per_worker=4, memory_limit='10GB')
     # client = Client(n_workers=2, threads_per_worker=2, memory_limit='8GB')
     # link to dashboard
