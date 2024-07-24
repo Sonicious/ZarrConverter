@@ -27,20 +27,24 @@ def main():
     fill_value_old_2 = 65534 # fill value in the original data from README
     fill_value_new = np.nan
 
-    def CubeFile(file):
+    def CubeFile(file, ref_coords=None):
         # extract date from filename
-        date = os.path.basename(file).split("_")[-1]
-        date = date.split(".")[0]
+        date = os.path.basename(file).split("_")[-2]
+        # date = date.split(".")[0]
         year = date[0:4]
         dayofyear = date[4:7]
         dt = datetime.datetime(int(year), 1, 1) + datetime.timedelta(int(dayofyear) - 1)
-        cube = xr.open_dataarray(file,
-                                 engine="rasterio",
+        cube = xr.open_dataarray(file, 
+                                 engine="rasterio", 
                                  chunks={}
         )
         cube = cube.where(cube != fill_value_old_1, fill_value_new)
         cube = cube.where(cube != fill_value_old_2, fill_value_new)
         cube = cube.assign_coords({"time":dt})
+        if ref_coords is not None:
+            x_axis = ref_coords["x"]
+            y_axis = ref_coords["y"]
+            cube = cube.assign_coords({"x": x_axis, "y": y_axis})
         cube = cube.expand_dims("time")
         return cube
     
@@ -48,7 +52,9 @@ def main():
 
     # Create the new dataset
     files = glob.glob(tiff_dir + "/*.tif")
-    cube = xr.concat([CubeFile(file) for file in files], dim="time")
+    files.sort()
+    ref_coords = CubeFile(files[0]).coords
+    cube = xr.concat([CubeFile(file, ref_coords) for file in files], dim="time")
     cube = cube.sortby("time")
     cube = cube.rename({"x":"lon", "y":"lat"})
     ds = cube.to_dataset(dim="band")
